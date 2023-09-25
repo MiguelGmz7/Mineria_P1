@@ -19,7 +19,7 @@ def frequencie_table(train_data, clase_column, test_data):
             attribute_errors = attribute_frequencies.sub(attribute_frequencies.max(axis=1), axis=0) # Calcular los errores de cada atributo
             #print(attribute_errors)
             #print("------------------Attribute_errors--------------")
-            best_rule = attribute_errors.idxmin()
+            best_rule = attribute_errors.idxmin() # Obtener la regla de One-R para el atributo actual
             #print(best_rule)
             #print("------------------Best_rule--------------")
             one_r_rules[column] = (best_rule, most_frequent_class)
@@ -28,7 +28,7 @@ def frequencie_table(train_data, clase_column, test_data):
             input("\n Preciona enter para continuar...")
             os.system("cls")
 
-    return one_r_rules, most_frequent_class
+    return one_r_rules, most_frequent_class   
 
 # Aplicar las reglas de One-R al conjunto de prueba y calcular la tasa de error
 
@@ -42,14 +42,13 @@ def app_OneR(one_r_rules, test_data, most_frequent_class, clase_column):
         predicted_class = None
 
         for column, (best_rule, _) in one_r_rules.items():
-            if (instance[column] == best_rule).any():
+            if (instance[column] == best_rule).any(): # Comprobar si la instancia cumple con la regla
                 predicted_class = most_frequent_class
 
-        actual_class = instance[clase_column]
+        actual_class = instance[clase_column] # Obtener la clase real de la instancia
 
         if predicted_class == actual_class:  # Comprobar si la predicción es correcta
             correct_predictions += 1
-
     accuracy = correct_predictions / len(test_data)  # Calcular la tasa de acierto
     print(f"Aciertos: {correct_predictions} ")
     print("Total: ",len(test_data))
