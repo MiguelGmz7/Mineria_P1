@@ -8,6 +8,10 @@ def main ():
 
     dataset = pandas.read_csv(filename)
 
-    muestra = dataset.sample(frac=porcentaje_entranimento)
-    y_train = muestra[clase]
-    x_train = muestra.drop(y_train)
+    muestra_entrenamiento = dataset.sample(frac=porcentaje_entranimento)
+    y_train = muestra_entrenamiento[clase]
+    x_train = muestra_entrenamiento.drop(y_train)
+
+    muestra_test = dataset.drop(x_train.index)
+    y_test = muestra_test[clase]
+    x_test = muestra_test.drop(y_test)
