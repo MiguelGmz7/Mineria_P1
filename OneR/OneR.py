@@ -4,15 +4,24 @@ import os
 # Inicializar un diccionario para almacenar las reglas de One-R
 def frequencie_table(train_data, clase_column, test_data):
     one_r_rules = {}
-    class_frequencies = train_data[clase_column].value_counts()
-    most_frequent_class = class_frequencies.idxmax()
+    class_frequencies = train_data[clase_column].value_counts() # Obtener la frecuencia de cada clase de entrenamiento yes: 9, no: 5
+
+    most_frequent_class = class_frequencies.idxmax() # Obtener la clase más frecuente de entrenamiento (yes)
 
     # Iterar a través de las columnas de atributos (excluyendo la columna de clase)
     for column in train_data.columns:
         if column != clase_column:
-            attribute_frequencies = train_data.groupby([column, clase_column]).size().unstack(fill_value=0)
-            attribute_errors = attribute_frequencies.sub(attribute_frequencies.max(axis=1), axis=0)
+            attribute_frequencies = train_data.groupby([column, clase_column]).size().unstack() # Obtener la tabla de frecuencias para el atributo actual
+            # hay un error, overcast tiene yes 3 veces y no 0 veces, pero en la tabla de frecuencia aparece yes 2 veces y no 0 vez
+            # R: ya lo arregle, el error estaba en el fill_value=0, lo cambie por fill_value=0
+            #print(attribute_frequencies)
+            #print("------------------Attribute_frequencies--------------")
+            attribute_errors = attribute_frequencies.sub(attribute_frequencies.max(axis=1), axis=0) # Calcular los errores de cada atributo
+            #print(attribute_errors)
+            #print("------------------Attribute_errors--------------")
             best_rule = attribute_errors.idxmin()
+            #print(best_rule)
+            #print("------------------Best_rule--------------")
             one_r_rules[column] = (best_rule, most_frequent_class)
             print(f"Regla de One-R para {column}: {best_rule}")
             print(f"Tabla de frecuencia para {column}:\n{attribute_frequencies}")
