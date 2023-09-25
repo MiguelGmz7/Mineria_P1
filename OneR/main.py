@@ -1,6 +1,6 @@
 import OneR
 import pandas as pd
-
+import os
 
 def main ():
     file_path = '../datasets/golf-dataset-categorical.csv'
@@ -12,14 +12,12 @@ def main ():
 
 
     train_data = data.sample(frac=train_sample_size) # agarramos el 80 porciento de toda nuestra tabla (atributos y clases)
-    y_train = train_data[clase_column] # copiamos en una variables las puras clases
-    x_train = train_data.drop(columns=clase_column) # eliminamos las clases de nuestro datos, (nos quedamos con los puros atributos)
 
-    test_data = data.drop(x_train.index) # Los datos que nos faltan osea el 20%, en este caso 3 instancias
-    y_test = test_data[clase_column] #las puras clases
+    test_data = data.drop(train_data.index) # Los datos que nos faltan osea el 20%, en este caso 3 instancias
 
-    OneR.frequencie_table(train_data, clase_column, test_data)
-    
+    one_r_rules, most_frequent_class = OneR.frequencie_table(train_data, clase_column, test_data)
+    OneR.app_OneR(one_r_rules, test_data, most_frequent_class, clase_column)
+
 
 if __name__ == '__main__':
     main()
