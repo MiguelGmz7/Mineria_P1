@@ -47,6 +47,8 @@ def app_OneR(one_r_rules, test_data, most_frequent_class, clase_column):
             correct_predictions += 1
     accuracy = correct_predictions / len(test_data)  # Calcular la tasa de acierto
     print(f"Aciertos: {correct_predictions} ")
-    print("Total: ",len(test_data))
+    print("Total: ",len(test_data)) 
     print(f"Tasa de acierto en el conjunto de prueba: {accuracy}")
+
+
 
