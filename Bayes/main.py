@@ -20,10 +20,62 @@ def split(data):
             media = count / index # se calcula el promedio
             frequency[column_name]['media'] = media #agregamos otra key al diccionario al final {'sepal-length': {..., '14': 6,'15':6.3, 'media': 6.3333}}
     return frequency
-
+                
+                
 def frequency(data):
     frequency = {}
-    for index, row  in data.iterrows():
+    for index, row, column  in data.iterrows():
+        # como puedo saber el nombre de las columnas 
+        # for column in data.columns:
+            frequency[column] = {}
+            frequency[column]['Iris-setosa'] = []
+            frequency[column]['Iris-virginica'] = []
+            frequency[column]['Iris-versicolor'] = []
+            #if data[column].dtypes == 'float':
+            if data.iloc[index]['iris'] == 'Iris-setosa':
+                # frequency[column]['Iris-setosa'] = data.iloc[index]['sepal-length']
+                if column == 'sepal-length':
+                    frequency[column]['Iris-setosa'].append(data.iloc[index]['sepal-length'])
+
+            if data.iloc[index]['iris'] == 'Iris-virginica':
+                # frequency[column]['Iris-virginica'] = data.iloc[index]['sepal-length']
+                if column == 'sepal-length':
+                    frequency[column]['Iris-virginica'].append(data.iloc[index]['sepal-length'])
+
+            if data.iloc[index]['iris'] == 'Iris-versicolor':
+                # frequency[column]['Iris-versicolor'] = data.iloc[index]['sepal-length']
+                if column == 'sepal-length':
+                    frequency[column]['Iris-versicolor'].append(data.iloc[index]['sepal-length'])
+        
+        # frequency[column] = {}
+        # if data.iloc[index]['iris'] == 'Iris-setosa':
+        #     # for column_name in data.column:
+        #     #     frequency[column_name] = {}
+        #     #     frequency[column_name] = 'iris-setosa'
+
+
+    return frequency            
+# crea una funcion que reciba un dataframe y retorne un diccionario con la tabla de frecuencia segun su iris
+def copilot(data):
+    frequency = {}
+    for column_name in data:
+        frequency[column_name] = {}
+        frequency[column_name]['Iris-setosa'] = []
+        frequency[column_name]['Iris-virginica'] = []
+        frequency[column_name]['Iris-versicolor'] = []
+        for index, row in data.iterrows():
+
+            if data.iloc[index]['iris'] == 'Iris-setosa':
+                if column_name == 'sepal-length':
+                    frequency[column_name]['Iris-setosa'].append(data.iloc[index]['sepal-length'])
+                
+            if data.iloc[index]['iris'] == 'Iris-virginica':
+                if column_name == 'sepal-length':
+                    frequency[column_name]['Iris-virginica'].append(data.iloc[index]['sepal-length'])
+            if data.iloc[index]['iris'] == 'Iris-versicolor':
+                if column_name == 'sepal-length':
+                    frequency[column_name]['Iris-versicolor'].append(data.iloc[index]['sepal-length'])
+    return frequency
 
 
 def main():
@@ -39,9 +91,6 @@ def main():
     #frecuency = split(df)
     #print(frecuency)
     # como pasar por cada una de las instancias del dataframe
-    for index, row  in df.iterrows():
-        # print(df.iloc[index])
-        if df.iloc[index]['iris'] == 'Iris-setosa':
-            print("holo")
+    print(copilot(df))
 if __name__ == '__main__':
     main()
