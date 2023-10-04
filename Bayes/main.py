@@ -36,26 +36,76 @@ def frequency(data):
         
         for index, row in data.iterrows():
 
-            if data.iloc[index]['iris'] == 'Iris-setosa':
+            if data.iloc[index]['iris'] == 'Iris-setosa': # llenamos la columna de iris setosa
                 x += 1
                 if column_name == 'sepal-length':
                     frequency[column_name]['Iris-setosa'][x] = data.iloc[index]['sepal-length']
+
                 if column_name == 'sepal-width':
                     value = data.iloc[index]['sepal-width']
                     if value not in frequency[column_name]['Iris-setosa']:
                         frequency[column_name]['Iris-setosa'][value] = 1
                     else:
                         frequency[column_name]['Iris-setosa'][value] += 1
+
+                if column_name == 'petal-length':
+                    frequency[column_name]['Iris-setosa'][x] = data.iloc[index]['petal-length']    
+                
+                if column_name == 'petal-width':
+                    value = data.iloc[index]['petal-width']
+                    if value not in frequency[column_name]['Iris-setosa']:
+                        frequency[column_name]['Iris-setosa'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-setosa'][value] += 1
                     
-            if data.iloc[index]['iris'] == 'Iris-virginica':
+            if data.iloc[index]['iris'] == 'Iris-virginica': # columna de iris virginica
                 y += 1
                 if column_name == 'sepal-length':
                     frequency[column_name]['Iris-virginica'][y] = data.iloc[index]['sepal-length']
+
+                if column_name == 'sepal-width':
+                    value = data.iloc[index]['sepal-width']
+                    if value not in frequency[column_name]['Iris-virginica']:
+                        frequency[column_name]['Iris-virginica'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-virginica'][value] += 1
+                
+                if column_name == 'petal-length':
+                    frequency[column_name]['Iris-virginica'][y] = data.iloc[index]['petal-length']
+
+                if column_name == 'petal-width':
+                    value = data.iloc[index]['petal-width']
+                    if value not in frequency[column_name]['Iris-virginica']:
+                        frequency[column_name]['Iris-virginica'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-virginica'][value] += 1
+
             
             if data.iloc[index]['iris'] == 'Iris-versicolor':
                 z += 1
                 if column_name == 'sepal-length':
                     frequency[column_name]['Iris-versicolor'][z] = data.iloc[index]['sepal-length']
+                
+                if column_name == 'sepal-width':
+                    value = data.iloc[index]['sepal-width']
+                    if value not in frequency[column_name]['Iris-versicolor']:
+                        frequency[column_name]['Iris-versicolor'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-versicolor'][value] += 1
+                
+                if column_name == 'petal-length':
+                    frequency[column_name]['Iris-versicolor'][z] = data.iloc[index]['petal-length']
+                
+                if column_name == 'petal-width':
+                    value = data.iloc[index]['petal-width']
+                    if value not in frequency[column_name]['Iris-versicolor']:
+                        frequency[column_name]['Iris-versicolor'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-versicolor'][value] += 1
+            
+    frequency['iris']['Iris-setosa'][0] = 5
+    frequency['iris']['Iris-virginica'][0] = 5 # aun no se como resolver
+    frequency['iris']['Iris-versicolor'][0] = 5
     return frequency
 
 
