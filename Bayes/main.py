@@ -33,24 +33,28 @@ def frequency(data):
         x = 0
         y = 0
         z = 0
+        
         for index, row in data.iterrows():
 
             if data.iloc[index]['iris'] == 'Iris-setosa':
                 x += 1
                 if column_name == 'sepal-length':
-                    #frequency[column_name]['Iris-setosa'].append(data.iloc[index]['sepal-length'])
                     frequency[column_name]['Iris-setosa'][x] = data.iloc[index]['sepal-length']
+                if column_name == 'sepal-width':
+                    value = data.iloc[index]['sepal-width']
+                    if value not in frequency[column_name]['Iris-setosa']:
+                        frequency[column_name]['Iris-setosa'][value] = 1
+                    else:
+                        frequency[column_name]['Iris-setosa'][value] += 1
                     
             if data.iloc[index]['iris'] == 'Iris-virginica':
                 y += 1
                 if column_name == 'sepal-length':
-                    #frequency[column_name]['Iris-virginica'].append(data.iloc[index]['sepal-length'])
                     frequency[column_name]['Iris-virginica'][y] = data.iloc[index]['sepal-length']
             
             if data.iloc[index]['iris'] == 'Iris-versicolor':
                 z += 1
                 if column_name == 'sepal-length':
-                    #frequency[column_name]['Iris-versicolor'].append(data.iloc[index]['sepal-length'])
                     frequency[column_name]['Iris-versicolor'][z] = data.iloc[index]['sepal-length']
     return frequency
 
