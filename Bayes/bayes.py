@@ -1,4 +1,5 @@
 import pandas
+import numpy as np
 class Bayes:
     def __init__(self):
         self.frequency = {}
@@ -7,7 +8,7 @@ class Bayes:
         self.group(data)
         self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
-
+        self.media()
         return self.frequency
 
 
@@ -91,19 +92,14 @@ class Bayes:
                             self.frequency[column_name]['Iris-versicolor'][value] += 1
             
         
-        if column_name == 'sepal-width':
-            self.laplace(column_name, tuple=('≥3.2', '<2.8', '2.8-3.2'))
         
-        if column_name == 'petal-width':
-            self.laplace(column_name, tuple=('<0.8','≥1.6','0.8-1.6'))
         
         if column_name == 'iris':
             self.frequency['iris']['Iris-setosa'][0] = 5
             self.frequency['iris']['Iris-virginica'][0] = 5 # aun no se como resolver
             self.frequency['iris']['Iris-versicolor'][0] = 5
         
-        #return self.frequency
-    
+
     def laplace(self,column_name,tuple):
     # ejeplo tuple = ('≥3.2', '<2.8', '2.8-3.2')
         for key in self.frequency[column_name]:
@@ -112,3 +108,13 @@ class Bayes:
                     self.frequency[column_name][key][i] = 1
                 else: 
                     self.frequency[column_name][key][i] += 1
+    
+    def media(self):
+        my_list = []
+        for values in self.frequency['sepal-length']['Iris-setosa'].values():
+            my_list.append(values)
+
+        my_array = np.array(my_list)
+        
+        self.frequency['sepal-length']['Iris-setosa']['m'] = my_array.mean()
+        self.frequency['sepal-length']['Iris-setosa']['d'] = my_array.std()
