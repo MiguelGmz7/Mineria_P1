@@ -2,9 +2,16 @@ import pandas
 class Bayes:
     def __init__(self):
         self.frequency = {}
+    
+    def compute_frequency(self, data):
+        self.group(data)
+        self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
+        self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
+
+        return self.frequency
+
 
     def group(self, data):
-        self.frequency = {}
         for column_name in data:
             self.frequency[column_name] = {}
             self.frequency[column_name]['Iris-setosa'] = {}
@@ -83,32 +90,12 @@ class Bayes:
                         else:
                             self.frequency[column_name]['Iris-versicolor'][value] += 1
             
-        # if column_name == 'sepal-width':
-        #     print("hola")
-        #     tuple = ('≥3.2', '<2.8', '2.8-3.2')
-        #     for key in self.frequency[column_name]:
-        #         print("entrando en ciclo")
-        #         print(key)
-        #         #if self.frequency[column_name][key].keys() != tuple:
-        #         for i in self.frequency[column_name][key]:
-        #             for j in tuple:
-        #                 print(i, " = ", j)
-        #                 if i == j:
-        #                     self.frequency[column_name][key][i] += 1
-        #                 else:
-        #                     self.frequency[column_name][key][j] = 0
-
- 
-            #   tuple = ('≥3.2', '<2.8', '2.8-3.2')
-            #   for i in tuple:
-            #       if i not in self.frequency[column_name]['Iris-setosa']:
-            #           self.frequency[column_name]['Iris-setosa'][i] = 0
-            #       if i not in self.frequency[column_name]['Iris-virginica']:
-            #           self.frequency[column_name]['Iris-virginica'][i] = 0
-            #       if i not in self.frequency[column_name]['Iris-versicolor']:
-            #           self.frequency[column_name]['Iris-versicolor'][i] = 0
-        # como iterar en un diccionario dentro de otro diccionario
         
+        if column_name == 'sepal-width':
+            self.laplace(column_name, tuple=('≥3.2', '<2.8', '2.8-3.2'))
+        
+        if column_name == 'petal-width':
+            self.laplace(column_name, tuple=('<0.8','≥1.6','0.8-1.6'))
         
         if column_name == 'iris':
             self.frequency['iris']['Iris-setosa'][0] = 5
@@ -116,3 +103,12 @@ class Bayes:
             self.frequency['iris']['Iris-versicolor'][0] = 5
         
         #return self.frequency
+    
+    def laplace(self,column_name,tuple):
+    # ejeplo tuple = ('≥3.2', '<2.8', '2.8-3.2')
+        for key in self.frequency[column_name]:
+            for i in tuple:
+                if i not in self.frequency[column_name][key]:
+                    self.frequency[column_name][key][i] = 1
+                else: 
+                    self.frequency[column_name][key][i] += 1

@@ -7,10 +7,15 @@ def main():
     df = pd.read_csv(file_path)
     #train_sample_size = .7
     bayes = Bayes()
-    # frequency = bayes.group(df)
+    frequency = bayes.compute_frequency(df)
     #tuple = ['sepal-length', 'sepal-width', 'petal-length', 'petal-width', 'iris']
     
-    # print(frequency)
-    bayes.group(df)
+    print("Tabla: ")
+    print(frequency)
+
+    # print("-------------------------------------------------------------------------------")
+
+    # print("Tabla Normalizada")
+    # print(bayes.laplace("sepal-width"))
 if __name__ == '__main__':
     main()
