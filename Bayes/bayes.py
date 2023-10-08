@@ -3,13 +3,14 @@ import numpy as np
 class Bayes:
     def __init__(self):
         self.frequency = {}
+        self.verisim = {}
     
     def compute_frequency(self, data):
         self.group(data)
-        self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
-        self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
         self.mean_std('sepal-length')
+        self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.mean_std('petal-length')
+        self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
         return self.frequency
 
 
@@ -111,18 +112,28 @@ class Bayes:
                     self.frequency[column_name][key][i] += 1
     
     def mean_std(self, colum_name):
-        # for values in self.frequency['sepal-length']['Iris-setosa'].values():
-        #     my_list.append(values)
-
-        # my_array = np.array(my_list)
         
-        # self.frequency['sepal-length']['Iris-setosa']['m'] = my_array.mean()
-        # self.frequency['sepal-length']['Iris-setosa']['d'] = my_array.std()
+        # for values in self.frequency['sepal-length']['Iris-setosa'].values():
         for key in self.frequency[colum_name]:
             my_list = []
-            for values in self.frequency[colum_name][key].values():
-                my_list.append(values)
+            for value in self.frequency[colum_name][key].values():
+                my_list.append(value)
             
             my_array = np.array(my_list)
             self.frequency[colum_name][key]['m'] = my_array.mean()
             self.frequency[colum_name][key]['d'] = my_array.std()
+    
+    def compute_verisimilitude(self):
+        columns = ('sepal-width','petal-width')
+        for colum_name in columns:
+            self.verisim = self.frequency
+            for key1 in self.verisim[colum_name]:
+                count = 0
+                for value in self.verisim[colum_name][key1].values():
+                    count += value
+
+                for key2 in self.verisim[colum_name][key1]:
+                    self.verisim[colum_name][key1][key2] = self.frequency[colum_name][key1][key2] / count
+        
+        return self.verisim
+            

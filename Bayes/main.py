@@ -19,6 +19,10 @@ def main():
     # my_array = np.array(my_list)
     # print( my_array.mean())
     
+    print("Tabla de frecuencia: ")
     print(bayes.compute_frequency(df))
+    print("-------------------------------------------------")
+    print("Tabla de verosimilitud: ")
+    print(bayes.compute_verisimilitude())
 if __name__ == '__main__':
     main()
