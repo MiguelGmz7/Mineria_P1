@@ -8,7 +8,8 @@ class Bayes:
         self.group(data)
         self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
-        self.media()
+        self.mean_std('sepal-length')
+        self.mean_std('petal-length')
         return self.frequency
 
 
@@ -109,12 +110,19 @@ class Bayes:
                 else: 
                     self.frequency[column_name][key][i] += 1
     
-    def media(self):
-        my_list = []
-        for values in self.frequency['sepal-length']['Iris-setosa'].values():
-            my_list.append(values)
+    def mean_std(self, colum_name):
+        # for values in self.frequency['sepal-length']['Iris-setosa'].values():
+        #     my_list.append(values)
 
-        my_array = np.array(my_list)
+        # my_array = np.array(my_list)
         
-        self.frequency['sepal-length']['Iris-setosa']['m'] = my_array.mean()
-        self.frequency['sepal-length']['Iris-setosa']['d'] = my_array.std()
+        # self.frequency['sepal-length']['Iris-setosa']['m'] = my_array.mean()
+        # self.frequency['sepal-length']['Iris-setosa']['d'] = my_array.std()
+        for key in self.frequency[colum_name]:
+            my_list = []
+            for values in self.frequency[colum_name][key].values():
+                my_list.append(values)
+            
+            my_array = np.array(my_list)
+            self.frequency[colum_name][key]['m'] = my_array.mean()
+            self.frequency[colum_name][key]['d'] = my_array.std()
