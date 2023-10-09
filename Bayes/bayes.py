@@ -1,20 +1,21 @@
-import pandas
+import math
 import numpy as np
+import pandas as pd
 class Bayes:
     def __init__(self):
         self.frequency = {}
         self.verisim = {}
     
-    def compute_frequency(self, data):
+    def compute_frequency(self, data): # toda la serie de pasos para sacar la tabla de frecuencia
         self.group(data)
         self.mean_std('sepal-length')
         self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.mean_std('petal-length')
         self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
-        return self.frequency
+        #return self.frequency
 
 
-    def group(self, data):
+    def group(self, data): # realiza tabla de frecuencia de los datos (tanto continuos como discretos)
         for column_name in data:
             self.frequency[column_name] = {}
             self.frequency[column_name]['Iris-setosa'] = {}
@@ -102,7 +103,7 @@ class Bayes:
             self.frequency['iris']['Iris-versicolor'][0] = 5
         
 
-    def laplace(self,column_name,tuple):
+    def laplace(self,column_name,tuple): # realiza correccion laplaceana para datos continuos
     # ejeplo tuple = ('≥3.2', '<2.8', '2.8-3.2')
         for key in self.frequency[column_name]:
             for i in tuple:
@@ -111,7 +112,7 @@ class Bayes:
                 else: 
                     self.frequency[column_name][key][i] += 1
     
-    def mean_std(self, colum_name):
+    def mean_std(self, colum_name): # realiza media y desviacion de datos continuos
         
         # for values in self.frequency['sepal-length']['Iris-setosa'].values():
         for key in self.frequency[colum_name]:
@@ -123,7 +124,7 @@ class Bayes:
             self.frequency[colum_name][key]['m'] = my_array.mean()
             self.frequency[colum_name][key]['d'] = my_array.std()
     
-    def compute_verisimilitude(self):
+    def compute_verisimilitude(self): # tabla de verosimilitud para datos discretos
         columns = ('sepal-width','petal-width')
         for colum_name in columns:
             self.verisim = self.frequency
@@ -135,5 +136,54 @@ class Bayes:
                 for key2 in self.verisim[colum_name][key1]:
                     self.verisim[colum_name][key1][key2] = self.frequency[colum_name][key1][key2] / count
         
+
+        self.frequency['iris']['Iris-setosa'][0] = 5 / 15
+        self.frequency['iris']['Iris-virginica'][0] = 5 / 15 # aun no se como resolver
+        self.frequency['iris']['Iris-versicolor'][0] = 5 / 15
         return self.verisim
             
+    def dataframe(self, data):
+        #df_verisim = pd.DataFrame.from_dict(self.verisim['sepal-width'], columns = ['Iris-setosa', 'Iris-Virginica', 'Iris-versicolor'])
+        count = 0
+        for index, row in data.iterrows():
+            count += 1
+            instance = {}
+            instance['Iris-setosa'] = []
+            instance['Iris-virginica'] = []
+            instance['Iris-versicolor'] = []
+            for column_name in data:
+                for key in instance:
+                    if column_name ==  'sepal-length' or column_name == 'petal-length':
+                        x = data.iloc[index][column_name]
+                        m = self.verisim[column_name][key]['m']
+                        d = self.verisim[column_name][key]['d']
+                        densidad = (np.pi*d) * np.exp(-0.5*((x-m)/d)**2)
+                        instance[key].append(densidad)
+                    
+                    if column_name == 'sepal-width':
+                        if data.iloc[index][column_name] == '≥3.2':
+                            v = self.verisim[column_name][key]['≥3.2']
+                            instance[key].append(v)
+
+                        if data.iloc[index][column_name] == '<2.8':
+                            v = self.verisim[column_name][key]['<2.8']
+                            instance[key].append(v)
+                        
+                        if data.iloc[index][column_name] == '2.8-3.2':
+                            v = self.verisim[column_name][key]['2.8-3.2']
+                            instance[key].append(v)
+                    
+                    if column_name == 'petal-width':
+                        if data.iloc[index][column_name] == '<0.8':
+                            v = self.verisim[column_name][key]['<0.8']
+                            instance[key].append(v)
+
+                        if data.iloc[index][column_name] == '≥1.6':
+                            v = self.verisim[column_name][key]['≥1.6']
+                            instance[key].append(v)
+                        
+                        if data.iloc[index][column_name] == '0.8-1.6':
+                            v = self.verisim[column_name][key]['0.8-1.6']
+                            instance[key].append(v)
+            print("--------------------------------------------------------------")
+            print(f"{count}: {instance}")   
