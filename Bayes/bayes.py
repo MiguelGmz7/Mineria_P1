@@ -12,15 +12,20 @@ class Bayes:
         self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.mean_std('petal-length')
         self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
-        #return self.frequency
+        return self.frequency
 
 
     def group(self, data): # realiza tabla de frecuencia de los datos (tanto continuos como discretos)
+        
         for column_name in data:
             self.frequency[column_name] = {}
             self.frequency[column_name]['Iris-setosa'] = {}
             self.frequency[column_name]['Iris-virginica'] = {}
             self.frequency[column_name]['Iris-versicolor'] = {}
+            if column_name == 'iris':
+                self.frequency[column_name]['Iris-setosa'][0] = 0
+                self.frequency[column_name]['Iris-virginica'][0] = 0 
+                self.frequency[column_name]['Iris-versicolor'][0] = 0
             x = 0
             y = 0
             z = 0
@@ -93,14 +98,19 @@ class Bayes:
                             self.frequency[column_name]['Iris-versicolor'][value] = 1
                         else:
                             self.frequency[column_name]['Iris-versicolor'][value] += 1
-            
-        
-        
-        
-        if column_name == 'iris':
-            self.frequency['iris']['Iris-setosa'][0] = 5
-            self.frequency['iris']['Iris-virginica'][0] = 5 # aun no se como resolver
-            self.frequency['iris']['Iris-versicolor'][0] = 5
+                    
+                if column_name == 'iris':
+                    value = data.iloc[index]['iris']
+                    if value == 'Iris-setosa':
+                        self.frequency['iris']['Iris-setosa'][0] += 1
+
+                    if value == 'Iris-virginica':
+                        self.frequency['iris']['Iris-virginica'][0] += 1
+
+                    if value == 'Iris-versicolor':
+                        self.frequency['iris']['Iris-versicolor'][0] += 1
+    
+        #return self.frequency
         
 
     def laplace(self,column_name,tuple): # realiza correccion laplaceana para datos continuos
@@ -125,7 +135,8 @@ class Bayes:
             self.frequency[colum_name][key]['d'] = my_array.std()
     
     def compute_verisimilitude(self): # tabla de verosimilitud para datos discretos
-        columns = ('sepal-width','petal-width')
+        columns = ('sepal-width','petal-width', 'iris')
+        total = self.frequency['iris']['Iris-setosa'][0] + self.frequency['iris']['Iris-virginica'][0] + self.frequency['iris']['Iris-versicolor'][0]
         for colum_name in columns:
             self.verisim = self.frequency
             for key1 in self.verisim[colum_name]:
@@ -135,16 +146,22 @@ class Bayes:
 
                 for key2 in self.verisim[colum_name][key1]:
                     self.verisim[colum_name][key1][key2] = self.frequency[colum_name][key1][key2] / count
-        
 
-        self.frequency['iris']['Iris-setosa'][0] = 5 / 15
-        self.frequency['iris']['Iris-virginica'][0] = 5 / 15 # aun no se como resolver
-        self.frequency['iris']['Iris-versicolor'][0] = 5 / 15
+                if colum_name == 'iris':
+                    self.verisim[colum_name][key1][0] = (self.frequency[colum_name][key1][0] / total) / 2
+
         return self.verisim
+
+        # for colum_name in columns:
+        # self.frequency['iris']['Iris-setosa'][0] = 5 / 15
+        # self.frequency['iris']['Iris-virginica'][0] = 5 / 15 # aun no se como resolver
+        # self.frequency['iris']['Iris-versicolor'][0] = 5 / 15
+        #return self.verisim
             
     def dataframe(self, data):
         #df_verisim = pd.DataFrame.from_dict(self.verisim['sepal-width'], columns = ['Iris-setosa', 'Iris-Virginica', 'Iris-versicolor'])
         count = 0
+        win = 0
         for index, row in data.iterrows():
             count += 1
             instance = {}
@@ -185,5 +202,49 @@ class Bayes:
                         if data.iloc[index][column_name] == '0.8-1.6':
                             v = self.verisim[column_name][key]['0.8-1.6']
                             instance[key].append(v)
+                    
+                    if column_name == 'iris':
+                            v = self.verisim[column_name][key][0]
+                            instance[key].append(v)
+
             print("--------------------------------------------------------------")
-            print(f"{count}: {instance}")   
+            #results = []
+            comp = {}
+            for key in instance: # la multiplicacion de cada clase
+                result = 1
+                for x in instance[key]:
+                    result = result * x
+                    #results.append(result)
+                    comp[key] = result
+            total = 0
+            for key in comp: # el total
+                total += comp[key]
+            for key in comp:
+                comp[key] = comp[key] / total
+            
+            r = comp.values()
+ 
+            # Convert object to a list
+            dt = list(r)
+            
+            # Convert list to an array
+            numpyArray = np.array(dt)
+            max = numpyArray.max()
+            
+            for key in comp:
+                if max == comp[key]:
+                    prediccion = key
+            
+            if prediccion == data.iloc[index]['iris']:
+                win += 1
+
+            print(f"{count}: {prediccion}")
+
+        accuracy = win / count
+        print(f"Acuracy: {accuracy}")
+
+    def multiplylist(key, instance):
+        result = 1
+        for x in instance[key]:
+            result = result * x
+        return result
