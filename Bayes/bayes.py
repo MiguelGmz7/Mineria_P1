@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
+import os
 class Bayes:
     def __init__(self):
         self.frequency = {}
@@ -12,7 +13,7 @@ class Bayes:
         self.laplace('sepal-width', tuple=('≥3.2', '<2.8', '2.8-3.2'))
         self.mean_std('petal-length')
         self.laplace('petal-width', tuple=('<0.8','≥1.6','0.8-1.6'))
-        return self.frequency
+        #return self.frequency
 
 
     def group(self, data): # realiza tabla de frecuencia de los datos (tanto continuos como discretos)
@@ -150,7 +151,7 @@ class Bayes:
                 if colum_name == 'iris':
                     self.verisim[colum_name][key1][0] = (self.frequency[colum_name][key1][0] / total) / 2
 
-        return self.verisim
+        #return self.verisim
 
         # for colum_name in columns:
         # self.frequency['iris']['Iris-setosa'][0] = 5 / 15
@@ -162,6 +163,8 @@ class Bayes:
         #df_verisim = pd.DataFrame.from_dict(self.verisim['sepal-width'], columns = ['Iris-setosa', 'Iris-Virginica', 'Iris-versicolor'])
         count = 0
         win = 0
+        y_true = []
+        y_pred = []
         for index, row in data.iterrows():
             count += 1
             instance = {}
@@ -237,6 +240,8 @@ class Bayes:
             
             if prediccion == data.iloc[index]['iris']:
                 win += 1
+            y_true.append(data.iloc[index]['iris'])
+            y_pred.append(prediccion)
 
             print(f"{count}: {prediccion}")
 
@@ -248,3 +253,24 @@ class Bayes:
         for x in instance[key]:
             result = result * x
         return result
+    
+    def print_tables(self,str):
+
+        #frequencia 
+            for key1 in self.frequency:
+                print(str) 
+                print("{:<20} {:<20} {:<20}".format('index', key1, 'Clase'))
+        
+                # print each data item.
+                for key2 in self.frequency[key1]:
+                        for key3 in self.frequency[key1][key2]:
+                            print("{:<20} {:<20} {:<20}".format(key3, self.frequency[key1][key2][key3], key2))
+                        
+                        print("----------------------------------------------------------------------")
+                input("presione una tecla....")
+                os.system("cls")
+            #print("----------------------------------------------------------------------")
+
+            
+
+            
