@@ -2,6 +2,7 @@ import math
 import numpy as np
 import pandas as pd
 import os
+from sklearn.metrics import *
 class Bayes:
     def __init__(self):
         self.frequency = {}
@@ -166,6 +167,7 @@ class Bayes:
         y_true = []
         y_pred = []
         ace = False
+        print("-------Modelo------")
         for index, row in data.iterrows():
             count += 1
             instance = {}
@@ -252,8 +254,20 @@ class Bayes:
                 print(f"{count}: Prediccion: {prediccion} Realidad: {data.iloc[index]['iris']} Acierto?: Falso")
 
         accuracy = win / count
-        self.matriz_confusion(np.array(y_true), np.array(y_pred))
         print(f"Acuracy: {accuracy}")
+        input("presione una tecla....")
+        os.system("cls")
+
+        print("--- Matriz de confusion ---")
+        self.matriz_confusion(np.array(y_true), np.array(y_pred))
+        input("presione una tecla....")
+        os.system("cls")
+
+        
+        print("--- Metricas ---")
+        self.informe_metricas(np.array(y_true), np.array(y_pred))
+        input("presione una tecla....")
+        os.system("cls")
 
     def multiplylist(key, instance):
         result = 1
@@ -279,4 +293,9 @@ class Bayes:
             #print("----------------------------------------------------------------------")
 
     def matriz_confusion(self, y_true, y_pred):
-        
+        conf_matrix = confusion_matrix(y_true,y_pred)
+        print(conf_matrix)
+
+    def informe_metricas(self, y_true, y_pred):
+        reporte = classification_report(y_true,y_pred)
+        print(reporte)
