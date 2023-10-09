@@ -5,7 +5,7 @@ from bayes import Bayes
 def split_data(data, train_ratio):
     # Obtén el número de filas para entrenamiento y prueba
     train_size = int(len(data) * train_ratio)
-    train_data = data.sample(n=train_size, random_state=42)
+    train_data = data.sample(n=train_size)
     test_data = data.drop(train_data.index)
     
     # Restablecer los índices para el conjunto de prueba
@@ -28,9 +28,11 @@ def main():
     train_data, test_data = split_data(df, train_ratio=0.7)
     
     # Practicar con el 100% de los datos
+    print("Practicando con el 100% de los datos:")
     bayes.dataframe(df)
     
     # Practicar con el 30% de los datos de prueba
+    print("Practicando con el 30% de los datos de prueba:")
     bayes.dataframe(test_data)
 
 if __name__ == '__main__':
