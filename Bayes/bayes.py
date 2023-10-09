@@ -165,6 +165,7 @@ class Bayes:
         win = 0
         y_true = []
         y_pred = []
+        ace = False
         for index, row in data.iterrows():
             count += 1
             instance = {}
@@ -240,10 +241,15 @@ class Bayes:
             
             if prediccion == data.iloc[index]['iris']:
                 win += 1
+                ace = True
             y_true.append(data.iloc[index]['iris'])
             y_pred.append(prediccion)
 
-            print(f"{count}: {prediccion}")
+            if ace == True:
+                print(f"{count}: Prediccion: {prediccion} Realidad: {data.iloc[index]['iris']} Acierto?: Verdadero")
+                ace = False
+            else:
+                print(f"{count}: Prediccion: {prediccion} Realidad: {data.iloc[index]['iris']} Acierto?: Falso")
 
         accuracy = win / count
         print(f"Acuracy: {accuracy}")
