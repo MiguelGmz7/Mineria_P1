@@ -252,6 +252,7 @@ class Bayes:
                 print(f"{count}: Prediccion: {prediccion} Realidad: {data.iloc[index]['iris']} Acierto?: Falso")
 
         accuracy = win / count
+        self.matriz_confusion(np.array(y_true), np.array(y_pred))
         print(f"Acuracy: {accuracy}")
 
     def multiplylist(key, instance):
@@ -277,6 +278,5 @@ class Bayes:
                 os.system("cls")
             #print("----------------------------------------------------------------------")
 
-            
-
-            
+    def matriz_confusion(self, y_true, y_pred):
+        
