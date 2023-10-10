@@ -1,4 +1,4 @@
-import math
+import copy
 import numpy as np
 import pandas as pd
 import os
@@ -140,7 +140,7 @@ class Bayes:
         columns = ('sepal-width','petal-width', 'iris')
         total = self.frequency['iris']['Iris-setosa'][0] + self.frequency['iris']['Iris-virginica'][0] + self.frequency['iris']['Iris-versicolor'][0]
         for colum_name in columns:
-            self.verisim = self.frequency
+            self.verisim = copy.deepcopy(self.frequency)
             for key1 in self.verisim[colum_name]:
                 count = 0
                 for value in self.verisim[colum_name][key1].values():
@@ -180,7 +180,7 @@ class Bayes:
                         x = data.iloc[index][column_name]
                         m = self.verisim[column_name][key]['m']
                         d = self.verisim[column_name][key]['d']
-                        densidad = (np.pi*d) * np.exp(-0.5*((x-m)/d)**2)
+                        densidad = (1/np.pi*d) * np.exp(-0.5*((x-m)/d)**2)
                         instance[key].append(densidad)
                     
                     if column_name == 'sepal-width':

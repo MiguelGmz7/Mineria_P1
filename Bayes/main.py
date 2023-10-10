@@ -20,7 +20,7 @@ def main():
     # Entrenamiento con el 100% de los datos
     bayes = Bayes()
     bayes.compute_frequency(df)
-    bayes.print_tables("Tabla de Frequencia")
+    #bayes.print_tables("Tabla de Frequencia")
     bayes.compute_verisimilitude()
     bayes.print_tables("Tabla de verisimilitud")
     
