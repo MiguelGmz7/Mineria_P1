@@ -20,9 +20,9 @@ def main():
     # Entrenamiento con el 100% de los datos
     bayes = Bayes()
     bayes.compute_frequency(df)
-    #bayes.print_tables("Tabla de Frequencia")
     bayes.compute_verisimilitude()
-    bayes.print_tables("Tabla de verisimilitud")
+    bayes.print_tables("Tabla de Frequencia",bayes.frequency)
+    bayes.print_tables("Tabla de verisimilitud",bayes.verisim)
     
     # Dividir los datos en entrenamiento (70%) y prueba (30%)
     train_data, test_data = split_data(df, train_ratio=0.7)

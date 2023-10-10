@@ -275,17 +275,17 @@ class Bayes:
             result = result * x
         return result
     
-    def print_tables(self,str):
+    def print_tables(self,str,table):
 
         #frequencia 
-            for key1 in self.frequency:
+            for key1 in table:
                 print(str) 
                 print("{:<20} {:<20} {:<20}".format('index', key1, 'Clase'))
         
                 # print each data item.
-                for key2 in self.frequency[key1]:
-                        for key3 in self.frequency[key1][key2]:
-                            print("{:<20} {:<20} {:<20}".format(key3, self.frequency[key1][key2][key3], key2))
+                for key2 in table[key1]:
+                        for key3 in table[key1][key2]:
+                            print("{:<20} {:<20} {:<20}".format(key3, table[key1][key2][key3], key2))
                         
                         print("----------------------------------------------------------------------")
                 input("presione una tecla....")
